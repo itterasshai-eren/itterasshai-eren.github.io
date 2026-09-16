@@ -1,20 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap');
 :root {
-    --c1: #A63C9F;
-    --c2: #581559;
-    --c3: #3B1340;
+    --c1: #b7a8b9;
     --c4: #230D26;
-    --cs: #4D308C;
     color-scheme: light dark;
 }
 
 * {
-    color: light-dark(black, white);
+    color: light-dark(var(--c4), var(--c1));
 }
 
 ::selection {
-    background-color: light-dark(  var(--c4), var(--c1));
-    color: light-dark( white, black);
+    background-color: light-dark(#9f8da1, #916d97);
+    color: light-dark(#f8f3f8, #d8cbd9);
 }
 
 highlight-button {
@@ -28,8 +25,8 @@ highlight-button {
     padding: 0.5rem 1rem;
 }
 highlight-button::selection {
-    background-color: light-dark(var(--c1), var(--c4));
-    color: light-dark(var(--c4), var(--c1));
+    background-color: light-dark(#9f8da1, #916d97);
+    color: light-dark( var(--c1), var(--c4));
 }
 
 body {
@@ -37,9 +34,10 @@ body {
     padding: 0;
     background-color: light-dark(var(--c1), var(--c4));
 
-    font-family: 'Playfair Display';
-    font-style: Regular;
+    font-family: "Domine", serif;
+    font-style: thin;
     font-size: 1.5rem;
+    /* font-weight: 10; */
     padding: 0 10vw;
 }
 
@@ -64,6 +62,6 @@ a {
 #loading-msg {
     height: 100px;
     width: 300px;
-    color: white;
+    color: var(--c1);
     font-size: 2rem;
 }
