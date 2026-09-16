@@ -1,5 +1,5 @@
-
-function get_mime(filename){
+import { show_loading, hide_loading } from './utils.js';
+function get_mime(filename) {
     const extension = filename.split('.').pop().toLowerCase();
     switch (extension) {
         case 'pdf':
@@ -16,90 +16,102 @@ function get_mime(filename){
     }
 
 }
-export async function decryptAndDownload(url, password, filename) {
-    const response = await fetch(url);
+export async function decryptAndDownload(url, get_password, filename) {
+    try {
+        show_loading("downloading and decrypting file...");
+        const response = await fetch(url);
 
-    if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const encrypted = new Uint8Array(
+            await response.arrayBuffer()
+        );
+
+        // -------------------------
+        // Parse file
+        // -------------------------
+
+        const salt = encrypted.slice(0, 16);
+        const iv = encrypted.slice(16, 28);
+        const ciphertext = encrypted.slice(28);
+
+        console.log("salt:", toHex(salt));
+        console.log("iv:", toHex(iv));
+
+        // -------------------------
+        // Convert password -> PBKDF2 key
+        // -------------------------
+        let pwd = get_password();
+        if (!pwd) {
+            hide_loading();
+            alert("Password is required to decrypt the file.");
+            return;
+        }
+        const passwordKey = await crypto.subtle.importKey(
+            "raw",
+            new TextEncoder().encode(pwd),
+            {
+                name: "PBKDF2"
+            },
+            false,
+            ["deriveKey"]
+        );
+
+        const key = await crypto.subtle.deriveKey(
+            {
+                name: "PBKDF2",
+                salt: salt,
+                iterations: 600000,
+                hash: "SHA-256"
+            },
+            passwordKey,
+            {
+                name: "AES-GCM",
+                length: 256
+            },
+            false,
+            ["decrypt"]
+        );
+
+        // -------------------------
+        // Decrypt
+        // -------------------------
+
+        const decrypted = await crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv: iv,
+                tagLength: 128
+            },
+            key,
+            ciphertext
+        );
+
+        // -------------------------
+        // Download
+        // -------------------------
+
+        const blob = new Blob([decrypted], {
+            type: get_mime(filename)
+        });
+
+        const downloadUrl = URL.createObjectURL(blob);
+        hide_loading();
+        window.open(downloadUrl);
+
+
+        // Don't immediately revoke in some browsers
+        setTimeout(() => {
+            URL.revokeObjectURL(downloadUrl);
+        }, 600000);//10 minutes
+    } catch (e) {
+        hide_loading();
+        alert("Decryption failed. Please check your password and try again.");
+        console.error("Decryption error:", e);
+        return;
     }
-
-    const encrypted = new Uint8Array(
-        await response.arrayBuffer()
-    );
-
-    // -------------------------
-    // Parse file
-    // -------------------------
-
-    const salt = encrypted.slice(0, 16);
-    const iv = encrypted.slice(16, 28);
-    const ciphertext = encrypted.slice(28);
-
-    console.log("salt:", toHex(salt));
-    console.log("iv:", toHex(iv));
-
-    // -------------------------
-    // Convert password -> PBKDF2 key
-    // -------------------------
-
-    const passwordKey = await crypto.subtle.importKey(
-        "raw",
-        new TextEncoder().encode(password),
-        {
-            name: "PBKDF2"
-        },
-        false,
-        ["deriveKey"]
-    );
-
-    const key = await crypto.subtle.deriveKey(
-        {
-            name: "PBKDF2",
-            salt: salt,
-            iterations: 600000,
-            hash: "SHA-256"
-        },
-        passwordKey,
-        {
-            name: "AES-GCM",
-            length: 256
-        },
-        false,
-        ["decrypt"]
-    );
-
-    // -------------------------
-    // Decrypt
-    // -------------------------
-
-    const decrypted = await crypto.subtle.decrypt(
-        {
-            name: "AES-GCM",
-            iv: iv,
-            tagLength: 128
-        },
-        key,
-        ciphertext
-    );
-
-    // -------------------------
-    // Download
-    // -------------------------
-
-    const blob = new Blob([decrypted], {
-        type: get_mime(filename)
-    });
-
-    const downloadUrl = URL.createObjectURL(blob);
-
-    window.open(downloadUrl);
-
-
-    // Don't immediately revoke in some browsers
-    setTimeout(() => {
-        URL.revokeObjectURL(downloadUrl);
-    }, 600000);//10 minutes
-
     // return downloadUrl;
 }
 

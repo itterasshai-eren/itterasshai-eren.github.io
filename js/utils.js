@@ -1,4 +1,3 @@
-module ;
 export function saveBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
 
@@ -11,4 +10,13 @@ export function saveBlob(blob, filename) {
     a.remove();
 
     URL.revokeObjectURL(url);
+}
+
+
+export function show_loading(msg) {
+    document.getElementById("loading").style.display = "flex";
+    document.getElementById("loading-msg").textContent = msg || "Loading...";
+}
+export function hide_loading() {
+    document.getElementById("loading").style.display = "none";
 }

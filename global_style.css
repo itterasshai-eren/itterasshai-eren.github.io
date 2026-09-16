@@ -1,47 +1,69 @@
-        :root {
-            --c1: #A63C9F;
-            --c2: #581559;
-            --c3: #3B1340;
-            --c4: #230D26;
-            --cs: #4D308C;
-            color-scheme: light dark;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+:root {
+    --c1: #A63C9F;
+    --c2: #581559;
+    --c3: #3B1340;
+    --c4: #230D26;
+    --cs: #4D308C;
+    color-scheme: light dark;
+}
 
-        * {
-            color: light-dark(black, white);
-        }
+* {
+    color: light-dark(black, white);
+}
 
-        ::selection {
-            background-color: light-dark(  var(--c4), var(--c1));
-            color: light-dark( white, black);
-        }
+::selection {
+    background-color: light-dark(  var(--c4), var(--c1));
+    color: light-dark( white, black);
+}
 
-        highlight-button {
-            border-radius: 7px;
-            border: 2px solid light-dark(var(--c1), var(--c4));
-            /* display: flex;
-            justify-content: center;
-            align-items: center; */
-            background-color: light-dark(var(--c4), var(--c1));
-            color: light-dark(var(--c1), var(--c4));
-            padding: 0.5rem 1rem;
-        }
-        highlight-button::selection {
-            background-color: light-dark(var(--c1), var(--c4));
-            color: light-dark(var(--c4), var(--c1));
-        }
+highlight-button {
+    border-radius: 7px;
+    border: 2px solid light-dark(var(--c1), var(--c4));
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    background-color: light-dark(var(--c4), var(--c1));
+    color: light-dark(var(--c1), var(--c4));
+    padding: 0.5rem 1rem;
+}
+highlight-button::selection {
+    background-color: light-dark(var(--c1), var(--c4));
+    color: light-dark(var(--c4), var(--c1));
+}
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: light-dark(var(--c1), var(--c4));
+body {
+    margin: 0;
+    padding: 0;
+    background-color: light-dark(var(--c1), var(--c4));
 
-            font-family: 'Playfair Display';
-            font-style: Regular;
-            font-size: 1.5rem;
-            padding: 0 10vw;
-        }
+    font-family: 'Playfair Display';
+    font-style: Regular;
+    font-size: 1.5rem;
+    padding: 0 10vw;
+}
 
-        a {
-            text-decoration: none;
-        }
+a {
+    text-decoration: none;
+}
+
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);            
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    display: none;
+}
+#loading-msg {
+    height: 100px;
+    width: 300px;
+    color: white;
+    font-size: 2rem;
+}
