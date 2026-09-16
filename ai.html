@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="global_style.css">
+    <script src="/js/crypt.js" type="module"></script>
+    <script>
+        function get_password() {
+            const password = prompt("Enter the password to decrypt the file:");
+            return password;
+        }
+    </script>
+</head>
+
+<body>
+    <h1> AI Page</h1>
+    <p> im learning ai and im using this page to track my progress and share fun stuff. </p>
+    <p>im currently on this <a href="#" onclick="decryptAndDownload('files/enc_file_148',  get_password(), 'undestanding_deep_learning.pdf')"><highlight-button display="inline">book</highlight-button>
+        </a>, Progress: <highlight-button>haven't started YET</highlight-button></p>
+
+</body>
+
+</html>
