@@ -14,17 +14,15 @@
     color: light-dark(#f8f3f8, #d8cbd9);
 }
 
-highlight-button {
+highlight {
     border-radius: 7px;
+    display: inline-block;
     border: 2px solid light-dark(var(--c1), var(--c4));
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
     background-color: light-dark(var(--c4), var(--c1));
     color: light-dark(var(--c1), var(--c4));
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
 }
-highlight-button::selection {
+highlight::selection {
     background-color: light-dark(#9f8da1, #916d97);
     color: light-dark( var(--c1), var(--c4));
 }
@@ -33,12 +31,16 @@ body {
     margin: 0;
     padding: 0;
     background-color: light-dark(var(--c1), var(--c4));
-
+    font-size: 1.1rem;
     font-family: "Domine", serif;
     font-style: thin;
-    font-size: 1.5rem;
-    /* font-weight: 10; */
     padding: 0 10vw;
+}
+
+@media (min-width: 768px) {
+    body {
+    font-size: 1.22rem;
+    }
 }
 
 a {
